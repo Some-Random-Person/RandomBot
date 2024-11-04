@@ -1,5 +1,5 @@
 const { events } = require("discord.js");
-const { execute } = require("../ping");
+const { execute } = require("../commands/utility/ping");
 
 module.exports = {
   name: Events.InteractionCreate,
