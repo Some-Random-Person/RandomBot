@@ -38,19 +38,33 @@ const rest = new REST().setToken(token);
       `Started refreshing ${commands.length} application (/) commands.`
     );
 
-    // The put method is used to fully refresh all commands in all guilds
-    const data = await rest.put(Routes.applicationCommands(clientId), {
-      body: commands,
+    // Clear existing global commands
+    await rest.put(Routes.applicationCommands(clientId), { body: [] });
+
+    // Prepare commands for global registration, defining and excluding guild specifc commands
+    const guildCommands = ["reload"];
+    const globalCommands = commands.filter(
+      (cmd) => !guildCommands.includes(cmd.name)
+    );
+
+    // Register all other commands globally
+    await rest.put(Routes.applicationCommands(clientId), {
+      body: globalCommands,
     });
 
-    // The put method is used to fully refresh all commands in the guild with the current set - This is used when testing
-    // const data = await rest.put(
-    //   Routes.applicationGuildCommands(clientId, guildId),
-    //   { body: commands }
-    // );
+    // Find and register guild-specific commands
+    const reloadGuildCommands = commands.filter((cmd) =>
+      guildCommands.includes(cmd.name)
+    );
+
+    if (reloadGuildCommands) {
+      await rest.put(Routes.applicationGuildCommands(clientId, guildId), {
+        body: reloadGuildCommands,
+      });
+    }
 
     console.log(
-      `Successfully reloaded ${data.length} application (/) commands.`
+      `Successfully reloaded ${globalCommands.length} global and ${reloadGuildCommands.length} guild-specific application (/) commands.`
     );
   } catch (error) {
     // And of course, make sure you catch and log any errors!
