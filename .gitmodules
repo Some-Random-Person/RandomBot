@@ -1,0 +1,3 @@
+[submodule "config"]
+	path = config
+	url = git@github.com:Some-Random-Person/RandomBot-config.git

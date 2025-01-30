@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { EmbedBuilder } = require("discord.js");
-const { APItoken, APIkey } = require("../../config.json");
+const { BringAPIUID, BringAPIkey } = require("../../config/config.json");
 
 const apiUrl = "https://api.bring.com/tracking/api/v2/tracking.json";
 
@@ -22,8 +22,8 @@ module.exports = {
     try {
       const response = await fetch(`${apiUrl}?q=${trackingNumber}`, {
         headers: {
-          "X-MyBring-API-Uid": APItoken,
-          "X-MyBring-API-Key": APIkey,
+          "X-MyBring-API-Uid": BringAPIUID,
+          "X-MyBring-API-Key": BringAPIkey,
           "X-Bring-Client-URL": "https://example.com",
         },
       });
@@ -101,8 +101,11 @@ module.exports = {
           .setColor("#0099ff")
           .setTitle(`Tracking information for ${trackingNumber}`)
           .addFields(
-            { name: "Status", value: package.eventSet[0].status || "N/A" }
-            // { name: 'Estimated Delivery', value: }
+            { name: "Status", value: package.eventSet[0].status || "N/A" },
+            {
+              name: "Estimated Delivery",
+              value: `${package.dateOfEstimatedDelivery}`,
+            }
           )
           .setTimestamp()
           .setFooter({
