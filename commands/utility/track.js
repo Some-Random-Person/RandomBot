@@ -104,7 +104,15 @@ module.exports = {
             { name: "Status", value: package.eventSet[0].status || "N/A" },
             {
               name: "Estimated Delivery",
-              value: `${package.dateOfEstimatedDelivery}`,
+              value: package.dateOfEstimatedDelivery || "N/A",
+            },
+            {
+              name: "Description",
+              value: package.eventSet[0].description || "N/A",
+            },
+            {
+              name: "City",
+              value: package.eventSet[0].city || "N/A",
             }
           )
           .setTimestamp()
