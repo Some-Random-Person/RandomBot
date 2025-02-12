@@ -62,7 +62,7 @@ module.exports = {
             name: `Sent from ${authorName}`,
             iconURL: authorLogo,
           });
-        } else {
+        } else if (authorName) {
           embed.setAuthor({
             name: `Sent from ${authorName}`,
           });
@@ -90,7 +90,7 @@ module.exports = {
             name: `Sent from ${authorName}`,
             iconURL: authorLogo,
           });
-        } else {
+        } else if (authorName) {
           embed.setAuthor({
             name: `Sent from ${authorName}`,
           });
@@ -128,7 +128,7 @@ module.exports = {
             name: `Sent from ${authorName}`,
             iconURL: authorLogo,
           });
-        } else {
+        } else if (authorName) {
           embed.setAuthor({
             name: `Sent from ${authorName}`,
           });
