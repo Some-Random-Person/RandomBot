@@ -1,5 +1,6 @@
 const { REST, Routes } = require("discord.js");
-const { clientId, guildId, token } = require("./config/config.json");
+require("dotenv").config();
+// const { clientId, guildId, token } = require("./config/config.json");
 const fs = require("node:fs");
 const path = require("node:path");
 
@@ -29,7 +30,7 @@ for (const folder of commandFolders) {
 }
 
 // Construct and prepare an instance of the REST module
-const rest = new REST().setToken(token);
+const rest = new REST().setToken(process.env.TOKEN);
 
 // and deploy your commands!
 (async () => {
@@ -39,7 +40,9 @@ const rest = new REST().setToken(token);
     );
 
     // Clear existing global commands
-    await rest.put(Routes.applicationCommands(clientId), { body: [] });
+    await rest.put(Routes.applicationCommands(process.env.CLIENT_ID), {
+      body: [],
+    });
 
     // Prepare commands for global registration, defining and excluding guild specifc commands
     const guildCommands = ["reload"];
@@ -48,7 +51,7 @@ const rest = new REST().setToken(token);
     );
 
     // Register all other commands globally
-    await rest.put(Routes.applicationCommands(clientId), {
+    await rest.put(Routes.applicationCommands(process.env.CLIENT_ID), {
       body: globalCommands,
     });
 
@@ -58,9 +61,15 @@ const rest = new REST().setToken(token);
     );
 
     if (reloadGuildCommands) {
-      await rest.put(Routes.applicationGuildCommands(clientId, guildId), {
-        body: reloadGuildCommands,
-      });
+      await rest.put(
+        Routes.applicationGuildCommands(
+          process.env.CLIENT_ID,
+          process.env.GUILD_ID
+        ),
+        {
+          body: reloadGuildCommands,
+        }
+      );
     }
 
     console.log(

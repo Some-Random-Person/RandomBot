@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { EmbedBuilder } = require("discord.js");
-const { BringAPIUID, BringAPIkey } = require("../../config/config.json");
+// const { BringAPIUID, BringAPIkey } = require("../../config/config.json");
+require("dotenv").config();
 
 const apiUrl = "https://api.bring.com/tracking/api/v2/tracking.json";
 
@@ -22,8 +23,8 @@ module.exports = {
     try {
       const response = await fetch(`${apiUrl}?q=${trackingNumber}`, {
         headers: {
-          "X-MyBring-API-Uid": BringAPIUID,
-          "X-MyBring-API-Key": BringAPIkey,
+          "X-MyBring-API-Uid": process.env.BRING_API_UID,
+          "X-MyBring-API-Key": process.env.BRING_API_KEY,
           "X-Bring-Client-URL": "https://example.com",
         },
       });
