@@ -1,5 +1,5 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
-const { EmbedBuilder } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
+
 // const { BringAPIUID, BringAPIkey } = require("../../config/config.json");
 require("dotenv").config();
 

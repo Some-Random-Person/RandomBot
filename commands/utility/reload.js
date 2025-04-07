@@ -1,14 +1,14 @@
 const { SlashCommandBuilder } = require("discord.js");
-const { execute } = require("./ping");
 
 module.exports = {
+  category: "utility",
   data: new SlashCommandBuilder()
     .setName("reload")
-    .setDescription("Reloads a command")
+    .setDescription("Reloads a command.")
     .addStringOption((option) =>
       option
         .setName("command")
-        .setDescription("The command to reload")
+        .setDescription("The command to reload.")
         .setRequired(true)
     ),
   async execute(interaction) {
@@ -22,12 +22,17 @@ module.exports = {
         `There is no command with name \`${commandName}\`!`
       );
     }
-    delete require.cache[require.resolve(`./${command.data.name}.js`)];
+
+    delete require.cache[
+      require.resolve(`../${command.category}/${command.data.name}.js`)
+    ];
 
     try {
-      const newCommand = require(`./${command.data.name}.js`);
+      const newCommand = require(`../${command.category}/${command.data.name}.js`);
       interaction.client.commands.set(newCommand.data.name, newCommand);
-      await interaction.reply(`Command \`${command.data.name}\` was reloaded!`);
+      await interaction.reply(
+        `Command \`${newCommand.data.name}\` was reloaded!`
+      );
     } catch (error) {
       console.error(error);
       await interaction.reply(
