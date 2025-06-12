@@ -6,6 +6,8 @@ require("dotenv").config();
 const apiUrl = "https://api.bring.com/tracking/api/v2/tracking.json";
 
 module.exports = {
+  category: "utility",
+  cooldown: 5,
   data: new SlashCommandBuilder()
     .setName("track")
     .setDescription("Track a package using Bring API")

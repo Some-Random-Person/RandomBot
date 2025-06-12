@@ -10,7 +10,9 @@ const limiter = new Bottleneck({
 });
 
 module.exports = {
+  category: "utility",
   cooldown: 5,
+  devOnly: true,
   data: new SlashCommandBuilder()
     .setName("collect-stats")
     .setDescription("Collects parcel info from Bring's system")
@@ -59,11 +61,7 @@ module.exports = {
 
         const data = await response.json();
 
-        if (
-          data.consignmentSet &&
-          data.consignmentSet[0] &&
-          data.consignmentSet[0].error
-        ) {
+        if (data.consignmentSet[0]?.error?.message) {
           const errorMessage = data.consignmentSet[0].error.message;
           console.log(`API Error for ${trackingNumber}: ${errorMessage}`);
           //await saveErrorToDatabase(trackingNumber, errorMessage); //Implement this function to save errors

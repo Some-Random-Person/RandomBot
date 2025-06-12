@@ -1,6 +1,5 @@
 const { REST, Routes } = require("discord.js");
 require("dotenv").config();
-// const { clientId, guildId, token } = require("./config/config.json");
 const fs = require("node:fs");
 const path = require("node:path");
 
@@ -15,10 +14,12 @@ for (const folder of commandFolders) {
   const commandFiles = fs
     .readdirSync(commandsPath)
     .filter((file) => file.endsWith(".js"));
+
   // Grab the SlashCommandBuilder#toJSON() output of each command's data for deployment
   for (const file of commandFiles) {
     const filePath = path.join(commandsPath, file);
     const command = require(filePath);
+
     if ("data" in command && "execute" in command) {
       commands.push(command.data.toJSON());
     } else {
@@ -35,45 +36,34 @@ const rest = new REST().setToken(process.env.TOKEN);
 // and deploy your commands!
 (async () => {
   try {
+    const guildCommands = commands.filter((cmd) => cmd.devOnly);
+    const globalCommands = commands.filter((cmd) => !cmd.devOnly);
+
     console.log(
-      `Started refreshing ${commands.length} application (/) commands.`
+      `Started reloading ${guildCommands.length} application (/) commands.`
     );
 
-    // Clear existing global commands
-    await rest.put(Routes.applicationCommands(process.env.CLIENT_ID), {
-      body: [],
-    });
-
-    // Prepare commands for global registration, defining and excluding guild specifc commands
-    const guildCommands = ["reload"];
-    const globalCommands = commands.filter(
-      (cmd) => !guildCommands.includes(cmd.name)
+    // The put method is used to fully refresh all commands in the guild with the current set
+    const guildData = await rest.put(
+      Routes.applicationGuildCommands(clientId, guildId),
+      { body: guildCommands }
     );
 
-    // Register all other commands globally
-    await rest.put(Routes.applicationCommands(process.env.CLIENT_ID), {
+    console.log(
+      `Successfully reloaded ${guildCommands.length}  application (/) commands.`
+    );
+
+    console.log(
+      `Started reloading ${globalCommands.length}  application (/) commands.`
+    );
+
+    // The put method is used to fully refresh all commands in the guild with the current set
+    const globalData = await rest.put(Routes.applicationCommands(clientId), {
       body: globalCommands,
     });
 
-    // Find and register guild-specific commands
-    const reloadGuildCommands = commands.filter((cmd) =>
-      guildCommands.includes(cmd.name)
-    );
-
-    if (reloadGuildCommands) {
-      await rest.put(
-        Routes.applicationGuildCommands(
-          process.env.CLIENT_ID,
-          process.env.GUILD_ID
-        ),
-        {
-          body: reloadGuildCommands,
-        }
-      );
-    }
-
     console.log(
-      `Successfully reloaded ${globalCommands.length} global and ${reloadGuildCommands.length} guild-specific application (/) commands.`
+      `Successfully reloaded ${globalCommands.length}  application (/) commands.`
     );
   } catch (error) {
     // And of course, make sure you catch and log any errors!
