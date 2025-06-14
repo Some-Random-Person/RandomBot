@@ -10,7 +10,7 @@ const limiter = new Bottleneck({
 });
 
 module.exports = {
-  category: "utility",
+  category: "bring",
   cooldown: 5,
   devOnly: true,
   data: new SlashCommandBuilder()

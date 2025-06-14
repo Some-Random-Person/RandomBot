@@ -4,12 +4,14 @@
   "description": "Discord bot for various time related things",
   "main": "main.js",
   "scripts": {
-    "start": "node main.js"
+    "start": "node main.js",
+    "deploy": "node deploy-commands"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@discordjs/builders": "^1.9.0",
+    "axios": "^1.10.0",
     "bottleneck": "^2.19.5",
     "discord.js": "^14.14.1",
     "dotenv": "^16.4.7",
