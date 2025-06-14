@@ -10,7 +10,9 @@ const limiter = new Bottleneck({
 });
 
 module.exports = {
+  category: "bring",
   cooldown: 5,
+  devOnly: true,
   data: new SlashCommandBuilder()
     .setName("collect-stats")
     .setDescription("Collects parcel info from Bring's system")
@@ -37,6 +39,7 @@ module.exports = {
     const totalBatches = Math.ceil(maxValue / batchSize);
     let completedRequests = 0;
     let errorCount = 0; // Track errors
+    let NotFound = 0;
 
     const fetchParcelData = async (trackingNumber) => {
       try {
@@ -59,15 +62,20 @@ module.exports = {
 
         const data = await response.json();
 
-        if (
-          data.consignmentSet &&
-          data.consignmentSet[0] &&
-          data.consignmentSet[0].error
-        ) {
+        if (data.consignmentSet[0]?.error?.message) {
           const errorMessage = data.consignmentSet[0].error.message;
-          console.log(`API Error for ${trackingNumber}: ${errorMessage}`);
+          const errorCode = data.consignmentSet[0].error.code;
+          console.log(
+            `API Error for ${trackingNumber}: (${errorCode}) ${errorMessage}`
+          );
           //await saveErrorToDatabase(trackingNumber, errorMessage); //Implement this function to save errors
-          errorCount++;
+
+          if (errorCode == 404) {
+            NotFound++;
+          } else {
+            errorCount++;
+          }
+
           return null;
         }
 
@@ -94,23 +102,44 @@ module.exports = {
         .setColor("#0099ff")
         .setTitle("Tracking Progress")
         .setDescription(
-          `Processing parcels...\nProgress: **${percentage}%**\nErrors: ${errorCount}`
+          `Processing ${totalBatches} batches of ${batchSize} size`
+        )
+        .setFields(
+          {
+            name: "Progress",
+            value: `${percentage}%`,
+          },
+          { name: "Errors", value: ` ${errorCount}`, inline: true },
+          { name: "Not found", value: `${NotFound}`, inline: true }
         ); //Show errors
       await interaction.editReply({ embeds: [embed] });
     };
 
+    await updateEmbedProgress();
+
     const intervalId = setInterval(updateEmbedProgress, 60 * 1000); // Update every minute
 
     try {
-      for (let i = 0; i < maxValue; i++) {
-        const varNum = i.toString().padStart(8, "0");
-        const trackingNumber = startString + varNum + endString;
-        await fetchParcelData(trackingNumber);
-        completedRequests++;
+      for (let batch = 0; batch < totalBatches; batch++) {
+        const promises = [];
+
+        for (
+          let i = batch * batchSize;
+          i < Math.min((batch + 1) * batchSize, maxValue);
+          i++
+        ) {
+          const varNum = i.toString().padStart(8, "0");
+          const trackingNumber = startString + varNum + endString;
+          promises.push(fetchParcelData(trackingNumber));
+        }
+
+        await Promise.allSettled(promises);
+        completedRequests += promises.length;
+        await updateEmbedProgress();
       }
 
+      // After all batches are processed
       clearInterval(intervalId);
-      await updateEmbedProgress();
 
       await interaction.followUp(
         `All parcels processed!  Total Errors: ${errorCount}`

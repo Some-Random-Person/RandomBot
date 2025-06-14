@@ -1,11 +1,10 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
-
-// const { BringAPIUID, BringAPIkey } = require("../../config/config.json");
-require("dotenv").config();
-
 const apiUrl = "https://api.bring.com/tracking/api/v2/tracking.json";
 
 module.exports = {
+  category: "bring",
+  cooldown: 5,
+  devOnly: true,
   data: new SlashCommandBuilder()
     .setName("track")
     .setDescription("Track a package using Bring API")
