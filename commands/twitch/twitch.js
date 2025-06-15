@@ -97,12 +97,19 @@ module.exports = {
         .setTitle(resStream.title)
         .setURL(`https://twitch.tv/${resStream.user_login}`)
         .addFields(
-          { name: "Game", value: resStream.game_name },
-          { name: "Viewers", value: resStream.viewer_count.toString() }
+          { name: "Game", value: resStream.game_name, inline: true },
+          {
+            name: "Viewers",
+            value: resStream.viewer_count.toString(),
+            inline: true,
+          }
         )
         .setImage(thumbnailUrl);
 
-      channel.send({ embeds: [embed] });
+      channel.send({
+        content: `${resStream.user_name} is now live!`,
+        embeds: [embed],
+      });
     }
 
     async function checkLive() {
