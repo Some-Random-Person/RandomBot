@@ -19,7 +19,7 @@ class guildService {
 
       console.log(`Added server ${name} to database`);
     } catch (error) {
-      throw error;
+      console.error(error);
     }
   }
 
@@ -37,7 +37,7 @@ class guildService {
         `Removed server ${name} from database and deleted all connected information`
       );
     } catch (error) {
-      console.error;
+      console.error(error);
     }
   }
 }
