@@ -24,6 +24,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(50),
         allowNull: false,
       },
+      isLive: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
       channelId: {
         type: DataTypes.STRING(20),
         allowNull: false,
