@@ -19,10 +19,16 @@ module.exports = {
         .setName("setting")
         .setDescription("The setting you want to update")
         .setRequired(true)
-        .addChoices({
-          name: "twitchNotifications",
-          value: "twitchNotification",
-        })
+        .addChoices(
+          {
+            name: "twitchNotifications",
+            value: "twitchNotification",
+          },
+          {
+            name: "welcomeMessage",
+            value: "welcomeMessage",
+          }
+        )
     )
     .addBooleanOption((option) =>
       option

@@ -73,7 +73,7 @@ async function sendLiveNotification(resStream, channelId, client) {
 
   const channel = await client.channels.fetch(channelId);
 
-  if (channel && channel.isTextBased && channel.isTextBased()) {
+  if (channel && channel.isTextBased()) {
     channel.send({
       content: `${resStream.user_name} is now live on Twitch!`,
       embeds: [embed],

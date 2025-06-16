@@ -136,7 +136,6 @@ module.exports = {
           ephemeral: true,
         });
         break;
-        break;
     }
   },
 };
