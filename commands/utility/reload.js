@@ -14,6 +14,19 @@ module.exports = {
         .setRequired(true)
     ),
   async execute(interaction) {
+    // Check for Administrator permission
+    if (
+      !interaction.member.permissions.has(
+        PermissionsBitField.Flags.Administrator
+      )
+    ) {
+      return interaction.reply({
+        content:
+          "You need the **Administrator** permission to use this command.",
+        ephemeral: true,
+      });
+    }
+
     const commandName = interaction.options
       .getString("command", true)
       .toLowerCase();
