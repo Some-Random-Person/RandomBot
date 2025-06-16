@@ -1,142 +1,123 @@
-const {
-  SlashCommandBuilder,
-  ChannelType,
-  EmbedBuilder,
-} = require("discord.js");
-const axios = require("axios");
+const { SlashCommandBuilder, ChannelType } = require("discord.js");
+
+const db = require("../../models");
+const streamerService = new (require("../../services/streamerService"))(db);
 
 module.exports = {
   category: "twitch",
   cooldown: 5,
   data: new SlashCommandBuilder()
     .setName("twitch")
-    .setDescription("Sets the channel for Twitch notifications")
-    .addChannelOption((option) =>
-      option
-        .setName("channel")
-        .setDescription("The channel for Twitch notifications")
-        .addChannelTypes(ChannelType.GuildText)
-        .setRequired(true)
+    .setDescription("Edit channels for Twitch notifications")
+    .addSubcommand((subcommand) =>
+      subcommand
+        .setName("add")
+        .setDescription("Adds a Twitch channel to notification list")
+        .addStringOption((option) =>
+          option
+            .setName("twitch-channel")
+            .setDescription("The twitch channel you want added")
+            .setRequired(true)
+        )
+        .addChannelOption((option) =>
+          option
+            .setName("channel")
+            .setDescription("The channel to send notifications to")
+            .setRequired(true)
+            .addChannelTypes(ChannelType.GuildText)
+        )
+    )
+    .addSubcommand((subcommand) =>
+      subcommand
+        .setName("edit")
+        .setDescription("Edit a Twitch channel in the notification list")
+        .addStringOption((option) =>
+          option
+            .setName("twitch-channel")
+            .setDescription("The twitch channel you want to edit")
+            .setRequired(true)
+        )
+        .addChannelOption((option) =>
+          option
+            .setName("channel")
+            .setDescription("The channel to send notifications to")
+            .setRequired(true)
+            .addChannelTypes(ChannelType.GuildText)
+        )
+    )
+    .addSubcommand((subcommand) =>
+      subcommand
+        .setName("remove")
+        .setDescription("Removes a Twitch channel to notification list")
+        .addStringOption((option) =>
+          option
+            .setName("twitch-channel")
+            .setRequired(true)
+            .setDescription("The twitch channel you want removed")
+        )
     ),
   async execute(interaction) {
-    const channel = interaction.options.getChannel("channel");
-    const twitchClientID = process.env.TWITCH_CLIENT_ID;
-    const twitchSecret = process.env.TWITCH_SECRET;
-    let twitchStreamers = [
-      { name: "whoisredux", isLive: false },
-      { name: "graylyrain", isLive: false },
-      { name: "double_eagle", isLive: false },
-      { name: "wrp_beater", isLive: false },
-      { name: "some_random_person", isLive: false },
-      { name: "gkpunk", isLive: false },
-      { name: "jasper_2077", isLive: false },
-      { name: "wakey_bakey_", isLive: false },
-      { name: "alonzo_lafayette", isLive: false },
-      { name: "scroobiusjib", isLive: false },
-      { name: "megtheartist", isLive: false },
-      { name: "anomadness", isLive: false },
-      { name: "arnavk17jee", isLive: false },
-      { name: "sisterzhe", isLive: false },
-      { name: "mrmike227", isLive: false },
-      { name: "mobpsychologist", isLive: false },
-      { name: "supremecmdrikeoakfield", isLive: false },
-      { name: "karma4d", isLive: false },
-      { name: "uhnoobis", isLive: false },
-      { name: "mungadungalis", isLive: false },
-      { name: "agentsnail47", isLive: false },
-      { name: "ageingfps", isLive: false },
-      { name: "icacj", isLive: false },
-      { name: "itzdibs", isLive: false },
-      { name: "rickdangerous", isLive: false },
-      { name: "grey_bearded_gamer", isLive: false },
-      { name: "therealfuzk", isLive: false },
-    ];
+    const twitchChannel = interaction.options.getString("twitch-channel");
+    const discordChannel = interaction.options.getChannel("channel");
 
-    await interaction.reply(`Twitch notifications will be sent to ${channel}`);
-
-    // gets twitchToken
-    const resPost = await axios.post(
-      `https://id.twitch.tv/oauth2/token?client_id=${twitchClientID}&client_secret=${twitchSecret}&grant_type=client_credentials`
-    );
-
-    const twitchToken = resPost.data.access_token;
-
-    // Function to get twitch avatar for the user
-    async function getProfileImage(streamerName) {
-      const res = await axios.get(
-        `https://api.twitch.tv/helix/users?login=${streamerName}`,
-        {
-          headers: {
-            "Client-ID": `${twitchClientID}`,
-            Authorization: `Bearer ${twitchToken}`,
-          },
-        }
-      );
-
-      return res.data.data[0].profile_image_url;
-    }
-
-    // Function to send a live notification to Discord
-    async function sendLiveNotification(resStream) {
-      const rawThumbnailUrl = resStream.thumbnail_url;
-      const thumbnailWidth = 1280;
-      const thumbnailHeight = 720;
-      const thumbnailUrl = rawThumbnailUrl
-        .replace("{width}", thumbnailWidth)
-        .replace("{height}", thumbnailHeight);
-
-      const profileImageUrl = await getProfileImage(resStream.user_login);
-
-      const embed = new EmbedBuilder()
-        .setColor("9146FF")
-        .setAuthor({
-          name: `${resStream.user_name} is now live!`,
-          url: `https://twitch.tv/${resStream.user_login}`,
-        })
-        .setThumbnail(`${profileImageUrl}`)
-        .setTitle(resStream.title)
-        .setURL(`https://twitch.tv/${resStream.user_login}`)
-        .addFields(
-          { name: "Game", value: resStream.game_name },
-          { name: "Viewers", value: resStream.viewer_count.toString() }
-        )
-        .setImage(thumbnailUrl);
-
-      channel.send({ embeds: [embed] });
-    }
-
-    async function checkLive() {
-      for (const streamer of twitchStreamers) {
+    switch (interaction.options.getSubcommand()) {
+      case "add":
         try {
-          const res = await axios.get(
-            `https://api.twitch.tv/helix/streams?user_login=${streamer.name}`,
-            {
-              headers: {
-                "Client-ID": `${twitchClientID}`,
-                Authorization: `Bearer ${twitchToken}`,
-              },
-            }
+          await streamerService.add(
+            interaction.guild.id,
+            twitchChannel,
+            discordChannel.id
           );
 
-          if (res.data.data.length > 0) {
-            const resStream = res.data.data[0];
-
-            if (!streamer.isLive) {
-              sendLiveNotification(resStream);
-            }
-            streamer.isLive = true;
-          } else {
-            streamer.isLive = false;
-          }
+          await interaction.reply(
+            `Notifications for \`${twitchChannel}\` will be sent to ${discordChannel}`
+          );
         } catch (error) {
-          console.error(error);
-          streamer.isLive = false;
+          await interaction.reply({
+            content: `Failed to add: ${error.message}`,
+            ephemeral: true,
+          });
         }
-      }
-    }
+        break;
+      case "edit":
+        try {
+          await streamerService.update(
+            interaction.guild.id,
+            twitchChannel,
+            discordChannel.id
+          );
 
-    setInterval(() => {
-      checkLive();
-    }, 60 * 1000); // seconds * milliseconds
+          await interaction.reply(
+            `Notifications for \`${twitchChannel}\` will be sent to ${discordChannel}`
+          );
+        } catch (error) {
+          await interaction.reply({
+            content: `Failed to edit: ${error.message}`,
+            ephemeral: true,
+          });
+        }
+        break;
+      case "remove":
+        try {
+          await streamerService.delete(interaction.guild.id, twitchChannel);
+
+          await interaction.reply(
+            `\`${twitchChannel}\` removed from notification list`
+          );
+        } catch (error) {
+          await interaction.reply({
+            content: `Failed to remove: ${error.message}`,
+            ephemeral: true,
+          });
+        }
+        break;
+      default:
+        await interaction.reply({
+          content: "Unknown subcommand.",
+          ephemeral: true,
+        });
+        break;
+        break;
+    }
   },
 };

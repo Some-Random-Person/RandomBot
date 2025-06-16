@@ -15,7 +15,8 @@
     "bottleneck": "^2.19.5",
     "discord.js": "^14.14.1",
     "dotenv": "^16.4.7",
-    "mongodb": "^6.13.0",
-    "node-fetch": "^2.7.0"
+    "mysql": "^2.18.1",
+    "mysql2": "^3.14.1",
+    "sequelize": "^6.37.7"
   }
 }

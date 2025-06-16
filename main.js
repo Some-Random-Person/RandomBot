@@ -2,8 +2,14 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const { Client, Collection, GatewayIntentBits } = require("discord.js");
+const { twitchCheckLive } = require("./services/twitchNotifier");
 require("dotenv").config();
-// const { token } = require("./config/config.json");
+const db = require("./models");
+
+db.sequelize.sync({
+  force: false,
+  logging: false,
+});
 
 // Create a new client instance
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
@@ -48,6 +54,11 @@ for (const file of eventFiles) {
     client.on(event.name, (...args) => event.execute(...args));
   }
 }
+
+// interval for Twitch notifications
+setInterval(() => {
+  twitchCheckLive(client).catch(console.error);
+}, 60 * 1000); // seconds * milliseconds
 
 // Log in to Discord with your client's token
 client.login(process.env.TOKEN);

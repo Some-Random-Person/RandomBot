@@ -8,6 +8,12 @@ Ping returns with a simple "pong" to show the bot is online and available
 
 Example: `/ping`
 
+## Twitch
+
+Command to start twitch notifications and specify which channel to post it.
+
+Will be rewritten to use a sequelize database and commands to add new streamers
+
 ## Track
 
 Track is a command to check package status for packages sent through Posten or Bring.<br>
