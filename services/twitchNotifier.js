@@ -2,6 +2,7 @@ const { EmbedBuilder } = require("discord.js");
 const axios = require("axios");
 const db = require("../models");
 const streamerService = new (require("../services/streamerService"))(db);
+const optionService = new (require("../services/optionService"))(db);
 
 // const channel = interaction.options.getChannel("channel");
 const twitchClientID = process.env.TWITCH_CLIENT_ID;
@@ -41,7 +42,7 @@ async function getProfileImage(streamerName) {
 }
 
 // Function to send a live notification to Discord
-async function sendLiveNotification(resStream, channelId) {
+async function sendLiveNotification(resStream, channelId, client) {
   const rawThumbnailUrl = resStream.thumbnail_url;
   const thumbnailWidth = 1280;
   const thumbnailHeight = 720;
@@ -70,13 +71,22 @@ async function sendLiveNotification(resStream, channelId) {
     )
     .setImage(thumbnailUrl);
 
-  channel.send({
-    content: `${resStream.user_name} is now live!`,
-    embeds: [embed],
-  });
+  const channel = await client.channels.fetch(channelId);
+
+  if (channel && channel.isTextBased && channel.isTextBased()) {
+    channel.send({
+      content: `${resStream.user_name} is now live!`,
+      embeds: [embed],
+    });
+  } else {
+    console.error(
+      `Channel with ID ${channelId} not found, or is not a text based channel`
+    );
+  }
 }
 
-async function twitchCheckLive() {
+async function twitchCheckLive(client) {
+  await getTwitchToken();
   const twitchStreamers = await streamerService.getAllLive();
 
   for (const streamer of twitchStreamers) {
@@ -97,15 +107,27 @@ async function twitchCheckLive() {
         const resStream = res.data.data[0];
 
         if (!streamer.isLive) {
-          sendLiveNotification(resStream, channelId);
+          sendLiveNotification(resStream, channelId, client);
         }
-        streamerService.updateLiveStatus(true);
+        streamerService.updateLiveStatus(
+          streamer.guildId,
+          streamer.streamerName,
+          true
+        );
       } else {
-        streamerService.updateLiveStatus(false);
+        streamerService.updateLiveStatus(
+          streamer.guildId,
+          streamer.streamerName,
+          false
+        );
       }
     } catch (error) {
       console.error(error);
-      streamerService.updateLiveStatus(false);
+      streamerService.updateLiveStatus(
+        streamer.guildId,
+        streamer.streamerName,
+        false
+      );
     }
   }
 }

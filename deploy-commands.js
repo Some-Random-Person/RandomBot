@@ -44,34 +44,30 @@ const rest = new REST().setToken(process.env.TOKEN);
 // and deploy your commands!
 (async () => {
   try {
-    // const guildCommands = commands.filter((cmd) => cmd.devOnly);
-    // const globalCommands = commands.filter((cmd) => !cmd.devOnly);
-
     console.log(
-      `Started reloading ${guildCommands.length} application (/) commands.`
+      `Started reloading ${guildCommands.length} guild application (/) commands.`
     );
 
     // The put method is used to fully refresh all commands in the guild with the current set
-    const guildData = await rest.put(
-      Routes.applicationGuildCommands(clientId, guildId),
-      { body: guildCommands }
+    await rest.put(Routes.applicationGuildCommands(clientId, guildId), {
+      body: guildCommands,
+    });
+
+    console.log(
+      `Successfully reloaded ${guildCommands.length} guild application (/) commands.`
     );
 
     console.log(
-      `Successfully reloaded ${guildCommands.length}  application (/) commands.`
-    );
-
-    console.log(
-      `Started reloading ${globalCommands.length}  application (/) commands.`
+      `Started reloading ${globalCommands.length} global application (/) commands.`
     );
 
     // The put method is used to fully refresh all commands in the guild with the current set
-    const globalData = await rest.put(Routes.applicationCommands(clientId), {
+    await rest.put(Routes.applicationCommands(clientId), {
       body: globalCommands,
     });
 
     console.log(
-      `Successfully reloaded ${globalCommands.length}  application (/) commands.`
+      `Successfully reloaded ${globalCommands.length} global application (/) commands.`
     );
   } catch (error) {
     // And of course, make sure you catch and log any errors!

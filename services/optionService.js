@@ -1,3 +1,5 @@
+const { toPlain } = require("../utility/toPlain");
+
 class optionService {
   constructor(db) {
     this.option = db.Option;
@@ -27,14 +29,13 @@ class optionService {
     }
   }
 
-  async getAllWithSetting(setting, value) {
+  async getOptionsByGuildId(guildId) {
     try {
-      const guildIds = await this.option.findAll({
-        where: { setting, value },
-        attributes: ["guildId"],
+      const guildOptions = await this.option.findAll({
+        where: { guildId },
       });
 
-      return guildIds;
+      return toPlain(guildOptions);
     } catch (error) {
       console.error(error);
     }

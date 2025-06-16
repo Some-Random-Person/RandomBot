@@ -16,7 +16,7 @@ module.exports = {
         .setRequired(true)
         .addChoices({
           name: "twitchNotifications",
-          value: "setting_twitchNotification",
+          value: "twitchNotification",
         })
     )
     .addBooleanOption((option) =>

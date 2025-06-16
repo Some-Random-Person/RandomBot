@@ -57,7 +57,7 @@ for (const file of eventFiles) {
 
 // interval for Twitch notifications
 setInterval(() => {
-  twitchCheckLive().catch(console.error);
+  twitchCheckLive(client).catch(console.error);
 }, 60 * 1000); // seconds * milliseconds
 
 // Log in to Discord with your client's token

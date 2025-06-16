@@ -1,6 +1,10 @@
+const { toPlain } = require("../utility/toPlain");
+
 class streamerService {
   constructor(db) {
     this.streamer = db.Streamer;
+    this.guild = db.Guild;
+    this.option = db.Option;
   }
 
   async add(guildId, streamerName, channelId) {
@@ -30,10 +34,22 @@ class streamerService {
   async getAllLive() {
     try {
       const streamers = await this.streamer.findAll({
-        where: { isLive: true },
+        include: [
+          {
+            model: this.guild,
+            include: [
+              {
+                model: this.option,
+                where: { setting: "twitchNotification", value: 1 },
+                required: true,
+              },
+            ],
+            required: true,
+          },
+        ],
       });
 
-      return streamers;
+      return toPlain(streamers);
     } catch (error) {
       console.error(error);
     }
@@ -41,7 +57,7 @@ class streamerService {
 
   async getAllGuild(guildId) {
     try {
-      const streamers = await this.streamed.findAll({
+      const streamers = await this.streamer.findAll({
         where: { guildId },
       });
 
