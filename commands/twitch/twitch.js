@@ -2,6 +2,7 @@ const {
   SlashCommandBuilder,
   ChannelType,
   PermissionFlagsBits,
+  PermissionsBitField,
 } = require("discord.js");
 
 const db = require("../../models");

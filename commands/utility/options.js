@@ -1,4 +1,8 @@
-const { SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
+const {
+  SlashCommandBuilder,
+  PermissionFlagsBits,
+  PermissionsBitField,
+} = require("discord.js");
 
 const db = require("../../models");
 const optionService = new (require("../../services/optionService"))(db);
