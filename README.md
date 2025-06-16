@@ -6,7 +6,7 @@ Currently only has a test /ping command and /track
 
 ### Ping
 
-Ping returns with a simple "pong" to show the bot is online and available
+Ping returns with the current roundtrip latency of the bot
 
 Example: `/ping`
 
