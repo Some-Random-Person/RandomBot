@@ -27,6 +27,19 @@ module.exports = {
         .setRequired(true)
     ),
   async execute(interaction) {
+    // Check for Administrator permission
+    if (
+      !interaction.member.permissions.has(
+        PermissionsBitField.Flags.Administrator
+      )
+    ) {
+      return interaction.reply({
+        content:
+          "You need the **Administrator** permission to use this command.",
+        ephemeral: true,
+      });
+    }
+
     const setting = interaction.options.getString("setting");
     const onOff = interaction.options.getBoolean("on_off");
     const serverId = interaction.guildId;
