@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
 
 module.exports = {
   category: "utility",
@@ -6,6 +6,7 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName("reload")
     .setDescription("Reloads a command.")
+    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     .addStringOption((option) =>
       option
         .setName("command")

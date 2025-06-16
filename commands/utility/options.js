@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, ChannelType } = require("discord.js");
+const { SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
 
 const db = require("../../models");
 const optionService = new (require("../../services/optionService"))(db);
@@ -9,6 +9,7 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName("options")
     .setDescription("Sets the channel for Twitch notifications")
+    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     .addStringOption((option) =>
       option
         .setName("setting")
