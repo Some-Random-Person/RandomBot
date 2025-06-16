@@ -75,7 +75,7 @@ async function sendLiveNotification(resStream, channelId, client) {
 
   if (channel && channel.isTextBased && channel.isTextBased()) {
     channel.send({
-      content: `${resStream.user_name} is now live!`,
+      content: `${resStream.user_name} is now live on Twitch!`,
       embeds: [embed],
     });
   } else {

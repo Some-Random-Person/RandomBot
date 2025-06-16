@@ -10,15 +10,22 @@ Example: `/ping`
 
 ## Twitch
 
-Command to start twitch notifications and specify which channel to post it.
+Connected to a database, allows you to choose which streamers you want notified, and where you want the notification to go.<br>
+Currently all notifications are notified in the "{streamerName} is now live on Twitch!" format, followed by an embed.
 
-Will be rewritten to use a sequelize database and commands to add new streamers
+Commands:
+To add streamers:<br>
+`/twitch add {streamerName} {channel}`
 
-## Track
+To edit which channel streamer notifications are sent to:<br>
+`/twitch edit {streamerName} {channel}`
 
-Track is a command to check package status for packages sent through Posten or Bring.<br>
-Track has a tracking number requirement, this tracking number is then sent to Posten and returns with information about the package
+To remove streamers: <br>
+`/twitch remove {streamerName}`
 
-Example: `/track TESTPACKAGEDELIVERED` or `/track 16546874651849`
+## Options
 
-Note: if the tracking number isn't found, it will return a TypeError. This will be fixed to provide a proper answer later.
+Sets the options for various other commands
+
+e.g.
+`/options setting: twitchNotifications on_off: true`
