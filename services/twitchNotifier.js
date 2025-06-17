@@ -89,47 +89,49 @@ async function twitchCheckLive(client) {
   await getTwitchToken();
   const twitchStreamers = await streamerService.getAllLive();
 
-  for (const streamer of twitchStreamers) {
-    const streamerName = streamer.streamerName;
-    const channelId = streamer.channelId;
-    try {
-      const res = await axios.get(
-        `https://api.twitch.tv/helix/streams?user_login=${streamerName}`,
-        {
-          headers: {
-            "Client-ID": `${twitchClientID}`,
-            Authorization: `Bearer ${twitchToken}`,
-          },
-        }
-      );
-
-      if (res.data.data.length > 0) {
-        const resStream = res.data.data[0];
-
-        if (!streamer.isLive) {
-          sendLiveNotification(resStream, channelId, client);
-        }
-        streamerService.updateLiveStatus(
-          streamer.guildId,
-          streamer.streamerName,
-          true
+  Promise.allSettled(
+    twitchStreamers.map(async (streamer) => {
+      const streamerName = streamer.streamerName;
+      const channelId = streamer.channelId;
+      try {
+        const res = await axios.get(
+          `https://api.twitch.tv/helix/streams?user_login=${streamerName}`,
+          {
+            headers: {
+              "Client-ID": `${twitchClientID}`,
+              Authorization: `Bearer ${twitchToken}`,
+            },
+          }
         );
-      } else {
+
+        if (res.data.data.length > 0) {
+          const resStream = res.data.data[0];
+
+          if (!streamer.isLive) {
+            sendLiveNotification(resStream, channelId, client);
+          }
+          streamerService.updateLiveStatus(
+            streamer.guildId,
+            streamer.streamerName,
+            true
+          );
+        } else {
+          streamerService.updateLiveStatus(
+            streamer.guildId,
+            streamer.streamerName,
+            false
+          );
+        }
+      } catch (error) {
+        console.error(error);
         streamerService.updateLiveStatus(
           streamer.guildId,
           streamer.streamerName,
           false
         );
       }
-    } catch (error) {
-      console.error(error);
-      streamerService.updateLiveStatus(
-        streamer.guildId,
-        streamer.streamerName,
-        false
-      );
-    }
-  }
+    })
+  );
 }
 
 module.exports = { twitchCheckLive };
