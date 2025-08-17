@@ -1,17 +1,7 @@
 const { Events, EmbedBuilder } = require("discord.js");
 const db = require("../models");
 const welcomeService = new (require("../services/welcomeService"))(db);
-
-function formatMessage(template, member) {
-  const replacements = {
-    "{username}": member.user.username,
-    "{mention}": member.user,
-    "{server}": member.guild.name,
-    "{linebreak}": "\n",
-  };
-
-  return template.replace(/{\w+}/g, (match) => replacements[match] || match);
-}
+const { formatMessage } = require("../utility/formatMessage");
 
 module.exports = {
   name: Events.GuildMemberAdd,

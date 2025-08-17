@@ -11,6 +11,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "guildId",
         onDelete: "cascade",
       });
+      Guild.hasOne(models.Welcome, {
+        foreignKey: "guildId",
+        onDelete: "cascade",
+      });
     }
   }
 
