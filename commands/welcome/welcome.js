@@ -4,6 +4,10 @@ const {
   PermissionFlagsBits,
   PermissionsBitField,
   EmbedBuilder,
+  ModalBuilder,
+  TextInputBuilder,
+  TextInputStyle,
+  ActionRowBuilder,
 } = require("discord.js");
 
 const db = require("../../models");
@@ -17,41 +21,42 @@ module.exports = {
     .setName("welcome")
     .setDescription("Edit welcome message")
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
-    .addSubcommand((subcommand) =>
-      subcommand
-        .setName("add")
-        .setDescription("Adds a welcome message to the server")
-        .addStringOption((option) =>
-          option
-            .setName("welcome-title")
-            .setDescription("The title of the welcome message")
-            .setRequired(true)
-        )
-        .addStringOption((option) =>
-          option
-            .setName("welcome-message")
-            .setDescription("The message for the welcome message")
-            .setRequired(true)
-        )
-        .addChannelOption((option) =>
-          option
-            .setName("channel")
-            .setDescription("The channel to send welcome message in")
-            .setRequired(true)
-            .addChannelTypes(ChannelType.GuildText)
-        )
-        .addStringOption((option) =>
-          option
-            .setName("image-url")
-            .setDescription(
-              "The URL to an image you want included in the embed"
-            )
-        )
-        .addStringOption((option) =>
-          option
-            .setName("welcome-color")
-            .setDescription("Hex code to the color you want the embed to be")
-        )
+    .addSubcommand(
+      (subcommand) =>
+        subcommand
+          .setName("add")
+          .setDescription("Adds a welcome message to the server")
+      // .addStringOption((option) =>
+      //   option
+      //     .setName("welcome-title")
+      //     .setDescription("The title of the welcome message")
+      //     .setRequired(true)
+      // )
+      // .addStringOption((option) =>
+      //   option
+      //     .setName("welcome-message")
+      //     .setDescription("The message for the welcome message")
+      //     .setRequired(true)
+      // )
+      // .addChannelOption((option) =>
+      //   option
+      //     .setName("channel")
+      //     .setDescription("The channel to send welcome message in")
+      //     .setRequired(true)
+      //     .addChannelTypes(ChannelType.GuildText)
+      // )
+      // .addStringOption((option) =>
+      //   option
+      //     .setName("image-url")
+      //     .setDescription(
+      //       "The URL to an image you want included in the embed"
+      //     )
+      // )
+      // .addStringOption((option) =>
+      //   option
+      //     .setName("welcome-color")
+      //     .setDescription("Hex code to the color you want the embed to be")
+      // )
     )
     .addSubcommand((subcommand) =>
       subcommand
@@ -121,34 +126,32 @@ module.exports = {
 
     switch (interaction.options.getSubcommand()) {
       case "add":
-        try {
-          const welcome = await welcomeService.add(
-            interaction.guild.id,
-            welcomeTitle,
-            welcomeMessage,
-            discordChannel.id,
-            welcomeImageUrl,
-            welcomeColor
-          );
+        const modal = new ModalBuilder()
+          .setCustomId("pingModal")
+          .setTitle("Welcome message");
 
-          if (welcome == "alreadyExists") {
-            await interaction.reply({
-              content:
-                "Welcome message already exists for this server, try editing instead",
-              ephemeral: true,
-            });
-            break;
-          }
+        const titleInput = new TextInputBuilder()
+          .setCustomId("welcome-title")
+          .setLabel("Welcome title")
+          .setStyle(TextInputStyle.Short)
+          .setPlaceholder("Welcome!")
+          .setRequired(true);
 
-          await interaction.reply(
-            `Welcome message with title ${welcomeTitle} will be sent to ${discordChannel}`
-          );
-        } catch (error) {
-          await interaction.reply({
-            content: `Failed to add: ${error.message}`,
-            ephemeral: true,
-          });
-        }
+        const messageInput = new TextInputBuilder()
+          .setCustomId("welcome-message")
+          .setLabel("Welcome message")
+          .setStyle(TextInputStyle.Paragraph)
+          .setPlaceholder("Welcome to the server..")
+          .setRequired(true);
+
+        const titleActionRow = new ActionRowBuilder().addComponents(titleInput);
+        const messageActionRow = new ActionRowBuilder().addComponents(
+          messageInput
+        );
+
+        modal.addComponents(titleActionRow, messageActionRow);
+
+        await interaction.showModal(modal);
         break;
       case "edit":
         try {

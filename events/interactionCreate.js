@@ -1,9 +1,20 @@
 const { Events, Collection, MessageFlags } = require("discord.js");
+const { welcomeAdd } = require("../utility/welcome/welcomeAdd");
 
 module.exports = {
   name: Events.InteractionCreate,
   async execute(interaction) {
     if (!interaction.isChatInputCommand()) return;
+
+    if (interaction.isModalSubmit()) {
+      switch (interaction.customId) {
+        case welcomeAdd:
+          welcomeAdd(interaction);
+          break;
+        default:
+          break;
+      }
+    }
 
     const command = interaction.client.commands.get(interaction.commandName);
 
