@@ -240,8 +240,6 @@ module.exports = {
           if (commandChannel && commandChannel.isTextBased()) {
             await interaction.reply({
               content: `Welcome message will be sent to ${channel}, this preview uses the person issuing the command as placeholder`,
-            });
-            commandChannel.send({
               embeds: [embed],
             });
           } else {
