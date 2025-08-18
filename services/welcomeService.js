@@ -43,6 +43,18 @@ class welcomeService {
     try {
       const welcome = await this.welcome.findOne({
         where: { guildId: guildId },
+      });
+
+      return toPlain(welcome);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async getWelcomeOnJoin(guildId) {
+    try {
+      const welcome = await this.welcome.findOne({
+        where: { guildId: guildId },
         include: [
           {
             model: this.guild,

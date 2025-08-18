@@ -7,7 +7,9 @@ module.exports = {
   name: Events.GuildMemberAdd,
   async execute(member) {
     try {
-      const welcomeInfo = await welcomeService.getWelcomeInfo(member.guild.id);
+      const welcomeInfo = await welcomeService.getWelcomeOnJoin(
+        member.guild.id
+      );
       if (!welcomeInfo) return; // just stops the code if there is no welcomeInfo
 
       const client = member.client;
