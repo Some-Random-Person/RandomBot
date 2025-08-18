@@ -24,8 +24,6 @@ class welcomeService {
         return "alreadyExists";
       }
 
-      console.log(welcomeImageurl);
-
       const newWelcome = await this.welcome.create({
         guildId,
         welcomeTitle,
