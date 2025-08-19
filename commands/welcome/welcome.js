@@ -231,7 +231,7 @@ module.exports = {
           const embed = new EmbedBuilder()
             .setColor(welcomeColor)
             .setTitle(`${title}`)
-            .setThumbnail("https://cdn.discordapp.com/embed/avatars/1.png")
+            .setThumbnail(member.user.displayAvatarURL())
             .setDescription(`${message}`)
             .setImage(welcomeImage);
 
