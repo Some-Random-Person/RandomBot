@@ -7,6 +7,7 @@ const {
   ActionRowBuilder,
   ComponentType,
   EmbedBuilder,
+  MessageFlags,
 } = require("discord.js");
 
 const db = require("../../models");
@@ -42,7 +43,7 @@ module.exports = {
       return interaction.reply({
         content:
           "You need the **Administrator** permission to use this command.",
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       });
     }
 
@@ -71,7 +72,7 @@ module.exports = {
       const role = await i.guild.roles.fetch(selection);
       await i.reply({
         content: `${i.user} has selected ${role}!`,
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       });
     });
   },
