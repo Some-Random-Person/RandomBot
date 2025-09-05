@@ -2,9 +2,7 @@ const { EmbedBuilder } = require("discord.js");
 const axios = require("axios");
 const db = require("../models");
 const streamerService = new (require("../services/streamerService"))(db);
-const optionService = new (require("../services/optionService"))(db);
 
-// const channel = interaction.options.getChannel("channel");
 const twitchClientID = process.env.TWITCH_CLIENT_ID;
 const twitchSecret = process.env.TWITCH_SECRET;
 
@@ -124,11 +122,6 @@ async function twitchCheckLive(client) {
         }
       } catch (error) {
         console.error(error);
-        streamerService.updateLiveStatus(
-          streamer.guildId,
-          streamer.streamerName,
-          false
-        );
       }
     })
   );

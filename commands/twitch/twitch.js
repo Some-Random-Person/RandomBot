@@ -72,7 +72,7 @@ module.exports = {
       return interaction.reply({
         content:
           "You need the **Administrator** permission to use this command.",
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       });
     }
 
@@ -94,7 +94,7 @@ module.exports = {
         } catch (error) {
           await interaction.reply({
             content: `Failed to add: ${error.message}`,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
           });
         }
         break;
@@ -112,7 +112,7 @@ module.exports = {
         } catch (error) {
           await interaction.reply({
             content: `Failed to edit: ${error.message}`,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
           });
         }
         break;
@@ -126,14 +126,14 @@ module.exports = {
         } catch (error) {
           await interaction.reply({
             content: `Failed to remove: ${error.message}`,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
           });
         }
         break;
       default:
         await interaction.reply({
           content: "Unknown subcommand.",
-          ephemeral: true,
+          flags: MessageFlags.Ephemeral,
         });
         break;
     }

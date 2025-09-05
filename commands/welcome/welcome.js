@@ -109,7 +109,7 @@ module.exports = {
       return interaction.reply({
         content:
           "You need the **Administrator** permission to use this command.",
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
       });
     }
 
@@ -135,7 +135,7 @@ module.exports = {
             await interaction.reply({
               content:
                 "Welcome message already exists for this server, try editing instead",
-              ephemeral: true,
+              flags: MessageFlags.Ephemeral,
             });
             break;
           }
@@ -146,7 +146,7 @@ module.exports = {
         } catch (error) {
           await interaction.reply({
             content: `Failed to add: ${error.message}`,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
           });
         }
         break;
@@ -165,7 +165,7 @@ module.exports = {
             await interaction.reply({
               content:
                 "Welcome message doesn't exist for this server, try adding one instead",
-              ephemeral: true,
+              flags: MessageFlags.Ephemeral,
             });
             break;
           }
@@ -176,7 +176,7 @@ module.exports = {
         } catch (error) {
           await interaction.reply({
             content: `Failed to edit: ${error.message}`,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
           });
         }
         break;
@@ -187,7 +187,7 @@ module.exports = {
           if (welcome == "doesntExist") {
             await interaction.reply({
               content: "Welcome message doesn't exist for this server",
-              ephemeral: true,
+              flags: MessageFlags.Ephemeral,
             });
             break;
           }
@@ -198,7 +198,7 @@ module.exports = {
         } catch (error) {
           await interaction.reply({
             content: `Failed to remove: ${error.message}`,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
           });
         }
         break;
@@ -211,7 +211,7 @@ module.exports = {
           if (!welcomeInfo) {
             await interaction.reply({
               content: "Welcome message doesn't exist for this server",
-              ephemeral: true,
+              flags: MessageFlags.Ephemeral,
             });
             break;
           }
@@ -231,7 +231,7 @@ module.exports = {
           const embed = new EmbedBuilder()
             .setColor(welcomeColor)
             .setTitle(`${title}`)
-            .setThumbnail("https://cdn.discordapp.com/embed/avatars/1.png")
+            .setThumbnail(member.user.displayAvatarURL())
             .setDescription(`${message}`)
             .setImage(welcomeImage);
 
@@ -240,8 +240,6 @@ module.exports = {
           if (commandChannel && commandChannel.isTextBased()) {
             await interaction.reply({
               content: `Welcome message will be sent to ${channel}, this preview uses the person issuing the command as placeholder`,
-            });
-            commandChannel.send({
               embeds: [embed],
             });
           } else {
@@ -253,14 +251,14 @@ module.exports = {
           console.error(error);
           await interaction.reply({
             content: `Failed to get: ${error.message}`,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
           });
         }
         break;
       default:
         await interaction.reply({
           content: "Unknown subcommand.",
-          ephemeral: true,
+          flags: MessageFlags.Ephemeral,
         });
         break;
     }
