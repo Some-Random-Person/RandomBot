@@ -12,7 +12,7 @@ services:
       - MYSQL_USER=${DB_ADMIN_USERNAME} #optional
       - MYSQL_PASSWORD=${DB_ADMIN_PASSWORD} #optional
     volumes:
-      - /home/srp/dev/test/data/randombot_db:/config
+      - /data/randombot_db:/config
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "--silent"]
@@ -43,7 +43,7 @@ services:
       - DB_HOST=randombot_db # service name of the mariadb container
       - DB_DIALECT=${DB_DIALECT}
     volumes:
-      - /home/srp/dev/test/data/randombot:/config
+      - /data/randombot:/config
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "pgrep", "-f", "node.*main.js"]
