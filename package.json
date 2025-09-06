@@ -16,8 +16,7 @@
     "bottleneck": "^2.19.5",
     "discord.js": "^14.14.1",
     "dotenv": "^16.4.7",
-    "mysql": "^2.18.1",
-    "mysql2": "^3.14.1",
+    "mariadb": "^3.4.5",
     "sequelize": "^6.37.7"
   }
 }
