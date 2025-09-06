@@ -1,0 +1,59 @@
+---
+services:
+  mariadb:
+    image: lscr.io/linuxserver/mariadb:latest
+    container_name: randombot_db
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Amsterdam
+      - MYSQL_ROOT_PASSWORD=${ROOT_ACCESS_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME} #optional
+      - MYSQL_USER=${DB_ADMIN_USERNAME} #optional
+      - MYSQL_PASSWORD=${DB_ADMIN_PASSWORD} #optional
+    volumes:
+      - /home/srp/dev/test/data/randombot_db:/config
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "--silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - randombotnet
+
+  randombot:
+    image: somrandomperson/randombot:latest
+    container_name: randombot
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    environment:
+      - TOKEN=${TOKEN}
+      - CLIENT_ID=${CLIENT_ID}
+      - GUILD_ID=${GUILD_ID}
+      - BRING_API_KEY=${BRING_API_KEY}
+      - BRING_API_UID=${BRING_API_UID}
+      - TWITCH_CLIENT_ID=${TWITCH_CLIENT_ID}
+      - TWITCH_SECRET=${TWITCH_SECRET}
+      - DB_NAME=${DB_NAME}
+      - DB_ADMIN_USERNAME=${DB_ADMIN_USERNAME}
+      - DB_ADMIN_PASSWORD=${DB_ADMIN_PASSWORD}
+      - DB_PORT=3306 # internal port for the mariadb container
+      - DB_HOST=randombot_db # service name of the mariadb container
+      - DB_DIALECT=${DB_DIALECT}
+    volumes:
+      - /home/srp/dev/test/data/randombot:/config
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "pgrep", "-f", "node.*main.js"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - randombotnet
+
+networks:
+  randombotnet:
+    driver: bridge
