@@ -1,0 +1,19 @@
+{
+  "name": "randombot_api",
+  "version": "1.0.0",
+  "description": "\"API for database handling related to the RandomBot Discord bot\"",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "jsend": "^1.1.0",
+    "mariadb": "^3.4.5",
+    "sequelize": "^6.37.7"
+  }
+}
