@@ -59,14 +59,7 @@ async function sendLiveNotification(resStream, channelId, client) {
     .setThumbnail(`${profileImageUrl}`)
     .setTitle(resStream.title)
     .setURL(`https://twitch.tv/${resStream.user_login}`)
-    .addFields(
-      { name: "Game", value: resStream.game_name, inline: true },
-      {
-        name: "Viewers",
-        value: resStream.viewer_count.toString(),
-        inline: true,
-      }
-    )
+    .addFields({ name: "Game", value: resStream.game_name, inline: true })
     .setImage(thumbnailUrl);
 
   const channel = await client.channels.fetch(channelId);
