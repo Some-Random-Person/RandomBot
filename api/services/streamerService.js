@@ -1,6 +1,6 @@
 import { toPlain } from "../utility/toPlain";
 
-class streamerService {
+class StreamerService {
   constructor(db) {
     this.streamer = db.Streamer;
     this.guild = db.Guild;
@@ -126,4 +126,4 @@ class streamerService {
   }
 }
 
-export default streamerService;
+export default StreamerService;

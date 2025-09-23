@@ -1,6 +1,6 @@
 import { toPlain } from "../utility/toPlain";
 
-class optionService {
+class OptionService {
   constructor(db) {
     this.option = db.Option;
   }
@@ -80,4 +80,4 @@ class optionService {
   }
 }
 
-export default optionService;
+export default OptionService;

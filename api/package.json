@@ -2,10 +2,10 @@
   "name": "randombot_api",
   "version": "1.0.0",
   "description": "\"API for database handling related to the RandomBot Discord bot\"",
-  "main": "index.js",
+  "main": "main.js",
   "type": "module",
   "scripts": {
-    "start": "node index.js"
+    "start": "node main.js"
   },
   "author": "",
   "license": "ISC",

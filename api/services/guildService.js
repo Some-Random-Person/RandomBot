@@ -1,4 +1,4 @@
-class guildService {
+class GuildService {
   constructor(db) {
     this.guild = db.Guild;
   }
@@ -23,7 +23,7 @@ class guildService {
     }
   }
 
-  async delete(id, name) {
+  async delete(id) {
     try {
       const guild = await this.guild.findByPk(id);
 
@@ -34,7 +34,7 @@ class guildService {
       await guild.destroy();
 
       console.log(
-        `Removed server ${name} from database and deleted all connected information`
+        `Removed server with id ${id} from database and deleted all connected information`
       );
     } catch (error) {
       console.error(error);
@@ -42,4 +42,4 @@ class guildService {
   }
 }
 
-export default guildService;
+export default GuildService;

@@ -1,6 +1,6 @@
 import { toPlain } from "../utility/toPlain";
 
-class welcomeService {
+class WelcomeService {
   constructor(db) {
     this.welcome = db.Welcome;
     this.guild = db.Guild;
@@ -124,4 +124,4 @@ class welcomeService {
   }
 }
 
-export default welcomeService;
+export default WelcomeService;

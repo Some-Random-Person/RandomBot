@@ -14,6 +14,8 @@ services:
     volumes:
       - /data/randombot_db:/config
     restart: unless-stopped
+    ports:
+      - ${DB_PORT}:3306
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "--silent"]
       interval: 10s
@@ -39,7 +41,7 @@ services:
       - DB_NAME=${DB_NAME}
       - DB_ADMIN_USERNAME=${DB_ADMIN_USERNAME}
       - DB_ADMIN_PASSWORD=${DB_ADMIN_PASSWORD}
-      - DB_PORT=3306 # internal port for the mariadb container
+      - DB_PORT=${DB_PORT} # internal port for the mariadb container
       - DB_HOST=randombot_db # service name of the mariadb container
       - DB_DIALECT=${DB_DIALECT}
     volumes:
