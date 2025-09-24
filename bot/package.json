@@ -1,6 +1,6 @@
 {
   "name": "randombot",
-  "version": "1.0.0",
+  "version": "1.0.6",
   "description": "Discord bot for various time related things",
   "main": "main.js",
   "scripts": {

@@ -3,6 +3,10 @@ const {
   ChannelType,
   PermissionFlagsBits,
   PermissionsBitField,
+  EmbedBuilder,
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
 } = require("discord.js");
 
 const db = require("../../models");
@@ -31,6 +35,13 @@ module.exports = {
             .setDescription("The channel to send notifications to")
             .setRequired(true)
             .addChannelTypes(ChannelType.GuildText)
+        )
+    )
+    .addSubcommand((subcommand) =>
+      subcommand
+        .setName("get")
+        .setDescription(
+          "Gets a list of all Twitch channels in the notification list"
         )
     )
     .addSubcommand((subcommand) =>
@@ -94,6 +105,92 @@ module.exports = {
         } catch (error) {
           await interaction.reply({
             content: `Failed to add: ${error.message}`,
+            flags: MessageFlags.Ephemeral,
+          });
+        }
+        break;
+      case "get":
+        try {
+          await interaction.deferReply();
+
+          const streamers = await streamerService.getAllGuild(
+            interaction.guild.id
+          );
+
+          const chunkSize = 12;
+          const pages = [];
+
+          for (let index = 0; index < streamers.length; index += chunkSize) {
+            const currentChunk = streamers.slice(index, index + chunkSize);
+
+            const embed = new EmbedBuilder()
+              .setColor("#0099ff")
+              .setTitle(
+                `All streamers notifications are on for (page ${
+                  pages.length + 1
+                })`
+              );
+
+            for (const streamer of currentChunk) {
+              embed.addFields({
+                name: streamer.dataValues.streamerName,
+                value: `<#${streamer.dataValues.channelId}>`,
+                inline: true,
+              });
+            }
+
+            pages.push(embed);
+          }
+
+          const row = new ActionRowBuilder().addComponents(
+            new ButtonBuilder()
+              .setCustomId("previous")
+              .setLabel("Previous")
+              .setStyle(ButtonStyle.Primary),
+            new ButtonBuilder()
+              .setCustomId("next")
+              .setLabel("Next")
+              .setStyle(ButtonStyle.Primary)
+          );
+
+          let currentPage = 0;
+          const message = await interaction.editReply({
+            embeds: [pages[currentPage]],
+            components: [row],
+          });
+
+          const collector = message.createMessageComponentCollector({
+            time: 120000,
+          });
+
+          collector.on("collect", async (i) => {
+            if (i.user.id !== interaction.user.id) {
+              await i.reply({
+                content: "You can't interact with this.",
+                flags: MessageFlags.Ephemeral,
+              });
+              return;
+            }
+
+            if (i.customId === "previous") {
+              currentPage =
+                currentPage > 0 ? currentPage - 1 : pages.length - 1;
+            } else if (i.customId === "next") {
+              currentPage =
+                currentPage + 1 < pages.length ? currentPage + 1 : 0;
+            }
+
+            await i.update({ embeds: [pages[currentPage]] });
+          });
+
+          collector.on("end", () => {
+            row.components.forEach((button) => button.setDisabled(true));
+            message.edit({ components: [row] });
+          });
+        } catch (error) {
+          console.log(error);
+          await interaction.reply({
+            content: `Failed to edit: ${error.message}`,
             flags: MessageFlags.Ephemeral,
           });
         }
