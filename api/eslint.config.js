@@ -8,5 +8,12 @@ export default defineConfig([
     plugins: { js },
     extends: ["js/recommended"],
     languageOptions: { globals: globals.node },
+    rules: {
+      "no-var": "error",
+      "prefer-const": "error",
+      camelcase: "error",
+      curly: "error",
+      eqeqeq: "error",
+    },
   },
 ]);
