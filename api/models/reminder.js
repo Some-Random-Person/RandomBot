@@ -5,7 +5,7 @@ export default (sequelize, DataTypes) => {
 
   Reminder.init(
     {
-      id: {
+      reminderId: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,

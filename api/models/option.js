@@ -3,29 +3,23 @@ import { Model } from "sequelize";
 export default (sequelize, DataTypes) => {
   class Option extends Model {
     static associate(models) {
-      Option.belongsTo(models.Guild, {
-        foreignKey: "guildId",
+      Option.belongsToMany(models.guild, {
+        through: models.guildOption,
+        foreignKey: "optionId",
+        otherKey: "guildId",
       });
     }
   }
 
   Option.init(
     {
-      id: {
+      optionId: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
-      guildId: {
-        type: DataTypes.STRING(20),
-        allowNull: false,
-      },
-      setting: {
+      name: {
         type: DataTypes.STRING(50),
-        allowNull: false,
-      },
-      value: {
-        type: DataTypes.STRING(100),
         allowNull: false,
       },
     },

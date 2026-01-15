@@ -1,25 +1,20 @@
 import { Model } from "sequelize";
 
 export default (sequelize, DataTypes) => {
-  class Guild extends Model {
+  class GuildOption extends Model {
     static associate(models) {
-      Guild.hasMany(models.Streamer, {
+      GuildOption.belongsTo(models.guild, {
         foreignKey: "guildId",
-        onDelete: "cascade",
+        as: "guild",
       });
-      Guild.hasMany(models.option, {
-        through: models.guildOption,
-        foreignKey: "guildId",
-        otherKey: "optionId",
-      });
-      Guild.hasOne(models.Welcome, {
-        foreignKey: "guildId",
-        onDelete: "cascade",
+      GuildOption.belongsTo(models.option, {
+        foreignKey: "optionId",
+        as: "option",
       });
     }
   }
 
-  Guild.init(
+  GuildOption.init(
     {
       guildId: {
         type: DataTypes.STRING(20),
@@ -31,14 +26,19 @@ export default (sequelize, DataTypes) => {
           },
         },
       },
+      optionId: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      value: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+      },
     },
     {
       sequelize,
-      tableName: "guilds",
-      timestamps: true,
-      indexes: [{ fields: ["id"] }],
+      tableName: "guildOptions",
     }
   );
-
-  return Guild;
 };

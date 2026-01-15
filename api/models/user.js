@@ -12,7 +12,7 @@ export default (sequelize, DataTypes) => {
 
   User.init(
     {
-      id: {
+      userId: {
         type: DataTypes.STRING(20),
         primaryKey: true,
         validate: {

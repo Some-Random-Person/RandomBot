@@ -11,7 +11,7 @@ export default (sequelize, DataTypes) => {
 
   Streamer.init(
     {
-      id: {
+      streamerId: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
