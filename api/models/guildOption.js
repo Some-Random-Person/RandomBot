@@ -3,11 +3,11 @@ import { Model } from "sequelize";
 export default (sequelize, DataTypes) => {
   class GuildOption extends Model {
     static associate(models) {
-      GuildOption.belongsTo(models.guild, {
+      GuildOption.belongsTo(models.Guild, {
         foreignKey: "guildId",
         as: "guild",
       });
-      GuildOption.belongsTo(models.option, {
+      GuildOption.belongsTo(models.Option, {
         foreignKey: "optionId",
         as: "option",
       });
@@ -41,4 +41,6 @@ export default (sequelize, DataTypes) => {
       tableName: "guildOptions",
     }
   );
+
+  return GuildOption;
 };

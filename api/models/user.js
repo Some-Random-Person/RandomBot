@@ -27,7 +27,7 @@ export default (sequelize, DataTypes) => {
       sequelize,
       tableName: "users",
       timestamps: true,
-      indexes: [{ fields: ["id"] }],
+      indexes: [{ fields: ["userId"] }],
     }
   );
 

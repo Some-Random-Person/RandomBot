@@ -7,8 +7,8 @@ export default (sequelize, DataTypes) => {
         foreignKey: "guildId",
         onDelete: "cascade",
       });
-      Guild.hasMany(models.option, {
-        through: models.guildOption,
+      Guild.belongsToMany(models.Option, {
+        through: models.GuildOption,
         foreignKey: "guildId",
         otherKey: "optionId",
       });
@@ -36,7 +36,7 @@ export default (sequelize, DataTypes) => {
       sequelize,
       tableName: "guilds",
       timestamps: true,
-      indexes: [{ fields: ["id"] }],
+      indexes: [{ fields: ["guildId"] }],
     }
   );
 

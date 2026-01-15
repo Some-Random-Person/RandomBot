@@ -2,7 +2,7 @@ import request from "supertest";
 import express from "express";
 import jsend from "jsend";
 import createError from "http-errors";
-import indexRouter from "../routes/index.js"; // Adjust path as needed
+import indexRouter from "../routes/index.js";
 
 describe("Index Routes", () => {
   let app;

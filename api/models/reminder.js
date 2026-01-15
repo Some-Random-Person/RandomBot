@@ -14,14 +14,8 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.STRING(20),
         allowNull: false,
       },
-      setting: {
-        type: DataTypes.STRING(20),
-        allowNull: false,
-      },
-      value: {
-        type: DataTypes.STRING(100),
-        allowNull: false,
-      },
+      // add reminder name, text, and time
+      // look into possibility of repeating
     },
     {
       sequelize,

@@ -3,8 +3,8 @@ import { Model } from "sequelize";
 export default (sequelize, DataTypes) => {
   class Option extends Model {
     static associate(models) {
-      Option.belongsToMany(models.guild, {
-        through: models.guildOption,
+      Option.belongsToMany(models.Guild, {
+        through: models.GuildOption,
         foreignKey: "optionId",
         otherKey: "guildId",
       });
@@ -27,7 +27,7 @@ export default (sequelize, DataTypes) => {
       sequelize,
       tableName: "options",
       timestamps: true,
-      indexes: [{ fields: ["guildId"] }],
+      indexes: [{ fields: ["optionId"] }],
     }
   );
 
