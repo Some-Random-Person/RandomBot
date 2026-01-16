@@ -10,7 +10,7 @@ router.post("/", async (req, res, next) => {
   try {
     const guild = await guildService.create(id);
 
-    res.status(201).jsend.success(guild);
+    return res.status(201).jsend.success(guild);
   } catch (error) {
     next(error);
   }
@@ -20,7 +20,7 @@ router.get("/", async (req, res, next) => {
   try {
     const guilds = await guildService.getAll();
 
-    res.status(200).jsend.success(guilds);
+    return res.status(200).jsend.success(guilds);
   } catch (error) {
     next(error);
   }
@@ -32,7 +32,7 @@ router.get("/:id", async (req, res, next) => {
   try {
     const guild = await guildService.getOne(id);
 
-    res.status(200).jsend.success(guild);
+    return res.status(200).jsend.success(guild);
   } catch (error) {
     next(error);
   }
@@ -44,7 +44,7 @@ router.delete("/", async (req, res, next) => {
   try {
     await guildService.delete(id);
 
-    res.status(204).end();
+    return res.status(204).end();
   } catch (error) {
     next(error);
   }
