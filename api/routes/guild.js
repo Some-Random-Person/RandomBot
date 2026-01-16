@@ -4,7 +4,7 @@ import GuildService from "../services/guildService.js";
 import db from "../models/index.js";
 const guildService = new GuildService(db);
 
-router.post("/", async (req, res) => {
+router.post("/", async (req, res, next) => {
   const { id, name } = req.body;
 
   try {
@@ -19,12 +19,11 @@ router.post("/", async (req, res) => {
       },
     });
   } catch (error) {
-    // add proper error handler, next(error)
-    console.error(error);
+    next(error);
   }
 });
 
-router.get("/", async (req, res) => {
+router.get("/", async (req, res, next) => {
   try {
     const guilds = await guildService.getAll();
 
@@ -37,12 +36,11 @@ router.get("/", async (req, res) => {
       },
     });
   } catch (error) {
-    // add proper error handler, next(error)
-    console.error(error);
+    next(error);
   }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", async (req, res, next) => {
   const { id } = req.params;
 
   try {
@@ -57,12 +55,11 @@ router.get("/:id", async (req, res) => {
       },
     });
   } catch (error) {
-    // add proper error handler, next(error)
-    console.error(error);
+    next(error);
   }
 });
 
-router.delete("/", async (req, res) => {
+router.delete("/", async (req, res, next) => {
   const { id, name } = req.body;
 
   try {
@@ -70,8 +67,7 @@ router.delete("/", async (req, res) => {
 
     res.status(204).end();
   } catch (error) {
-    // add proper error handler, next(error)
-    console.error(error);
+    next(error);
   }
 });
 
