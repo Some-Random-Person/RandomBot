@@ -19,10 +19,12 @@ app.use(express.json());
 // routes
 import indexRouter from "./routes/index.js";
 import guildRouter from "./routes/guild.js";
+import optionRouter from "./routes/option.js";
 
 // binding routes to app
 app.use("/", indexRouter);
 app.use("/guild", guildRouter);
+app.use("/option", optionRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
