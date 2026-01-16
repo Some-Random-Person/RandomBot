@@ -2,12 +2,11 @@ import { Router } from "express";
 const router = Router();
 
 router.get("/health", (req, res) => {
-  const data = {
+  return res.status(200).jsend.success({
+    status: "healthy",
     uptime: process.uptime(),
-    message: "healthy",
-    date: new Date(),
-  };
-  return res.status(200).jsend.success(data);
+    timestamp: new Date().toISOString(),
+  });
 });
 
 export default router;

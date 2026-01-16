@@ -10,7 +10,7 @@ router.post("/", async (req, res, next) => {
   try {
     const option = await optionService.create(name);
 
-    res.status(201).jsend.success({ option });
+    res.status(201).jsend.success(option);
   } catch (error) {
     next(error);
   }
@@ -20,7 +20,7 @@ router.get("/", async (req, res, next) => {
   try {
     const options = await optionService.getAll();
 
-    res.status(200).jsend.success({ options });
+    res.status(200).jsend.success(options);
   } catch (error) {
     next(error);
   }
@@ -32,7 +32,7 @@ router.get("/:id", async (req, res, next) => {
   try {
     const option = await optionService.getOne(id);
 
-    res.status(200).jsend.success({ option });
+    res.status(200).jsend.success(option);
   } catch (error) {
     next(error);
   }
@@ -44,7 +44,7 @@ router.put("/", async (req, res, next) => {
   try {
     const option = await optionService.update(id, name);
 
-    res.status(200).jsend.success({ option });
+    res.status(200).jsend.success(option);
   } catch (error) {
     next(error);
   }
