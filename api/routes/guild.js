@@ -5,10 +5,10 @@ import db from "../models/index.js";
 const guildService = new GuildService(db);
 
 router.post("/", async (req, res, next) => {
-  const { id, name } = req.body;
+  const { id } = req.body;
 
   try {
-    const guild = await guildService.create(id, name);
+    const guild = await guildService.create(id);
 
     res.status(201).jsend.success({
       status: "success",
@@ -60,10 +60,10 @@ router.get("/:id", async (req, res, next) => {
 });
 
 router.delete("/", async (req, res, next) => {
-  const { id, name } = req.body;
+  const { id } = req.body;
 
   try {
-    await guildService.delete(id, name);
+    await guildService.delete(id);
 
     res.status(204).end();
   } catch (error) {

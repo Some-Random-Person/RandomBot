@@ -1,11 +1,12 @@
 import { NotFoundError, ConflictError } from "../middleware/error.js";
+import toPlain from "../utility/toPlain.js";
 
 class guildService {
   constructor(db) {
     this.guild = db.Guild;
   }
 
-  async create(id, name) {
+  async create(id) {
     const guild = await this.guild.findByPk(id);
 
     if (guild) {
@@ -14,8 +15,7 @@ class guildService {
 
     const newGuild = await this.guild.create({ guildId: id });
 
-    console.log(`Added server "${name}" to database`);
-    return newGuild;
+    return toPlain(newGuild);
   }
 
   async getOne(id) {
@@ -25,7 +25,7 @@ class guildService {
       throw new NotFoundError(`Guild "${id}" not found`);
     }
 
-    return guild;
+    return toPlain(guild);
   }
 
   async getAll() {
@@ -35,10 +35,10 @@ class guildService {
       throw new NotFoundError(`No guilds found`);
     }
 
-    return guilds;
+    return toPlain(guilds);
   }
 
-  async delete(id, name) {
+  async delete(id) {
     const guild = await this.guild.findByPk(id);
 
     if (!guild) {
@@ -47,10 +47,7 @@ class guildService {
 
     await guild.destroy();
 
-    console.log(
-      `Removed server "${name}" from database and deleted all connected information`
-    );
-    return guild;
+    return toPlain(guild);
   }
 }
 

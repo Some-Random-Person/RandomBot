@@ -1,4 +1,5 @@
 import { ConflictError, NotFoundError } from "../middleware/error.js";
+import toPlain from "../utility/toPlain.js";
 
 class optionService {
   constructor(db) {
@@ -17,7 +18,7 @@ class optionService {
     const newOption = await this.option.create({ name });
 
     console.log(`Added option "${name}" to database`);
-    return newOption;
+    return toPlain(newOption);
   }
 
   async getOne(id) {
@@ -27,7 +28,7 @@ class optionService {
       throw new NotFoundError(`Option "${id}" not found`);
     }
 
-    return option;
+    return toPlain(option);
   }
 
   async getAll() {
@@ -37,10 +38,18 @@ class optionService {
       throw new NotFoundError(`No options found`);
     }
 
-    return options;
+    return toPlain(options);
   }
 
   async update(id, name) {
+    const otherOption = await this.option.findOne({
+      where: { name },
+    });
+
+    if (otherOption) {
+      throw new ConflictError(`Another option is already called "${name}"`);
+    }
+
     const option = await this.option.findByPk(id);
 
     if (!option) {
@@ -49,7 +58,7 @@ class optionService {
 
     const updatedOption = await option.update({ name });
 
-    return updatedOption.get({ plain: true });
+    return toPlain(updatedOption);
   }
 
   async delete(id) {
@@ -61,7 +70,7 @@ class optionService {
 
     await option.destroy();
 
-    return option;
+    return toPlain(option);
   }
 }
 
