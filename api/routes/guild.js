@@ -10,14 +10,7 @@ router.post("/", async (req, res, next) => {
   try {
     const guild = await guildService.create(id);
 
-    res.status(201).jsend.success({
-      status: "success",
-      data: {
-        statusCode: 201,
-        result: "Guild successfully created",
-        guild,
-      },
-    });
+    res.status(201).jsend.success({ guild });
   } catch (error) {
     next(error);
   }
@@ -27,14 +20,7 @@ router.get("/", async (req, res, next) => {
   try {
     const guilds = await guildService.getAll();
 
-    res.status(200).jsend.success({
-      status: "success",
-      data: {
-        statusCode: 200,
-        result: "Successfully retreived all guilds",
-        guilds,
-      },
-    });
+    res.status(200).jsend.success({ guilds });
   } catch (error) {
     next(error);
   }
@@ -46,14 +32,7 @@ router.get("/:id", async (req, res, next) => {
   try {
     const guild = await guildService.getOne(id);
 
-    res.status(200).jsend.success({
-      status: "success",
-      data: {
-        statusCode: 200,
-        result: "Successfully retreived guild",
-        guild,
-      },
-    });
+    res.status(200).jsend.success({ guild });
   } catch (error) {
     next(error);
   }

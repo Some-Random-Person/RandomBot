@@ -4,7 +4,7 @@ const router = Router();
 router.get("/health", (req, res) => {
   const data = {
     uptime: process.uptime(),
-    message: "OK",
+    message: "healthy",
     date: new Date(),
   };
   return res.status(200).jsend.success(data);
