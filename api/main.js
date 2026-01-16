@@ -8,7 +8,7 @@ import { errorHandler } from "./middleware/error.js";
 import createError from "http-errors";
 
 db.sequelize.sync({
-  force: false,
+  force: true,
   logging: console.log,
 });
 
@@ -20,11 +20,13 @@ app.use(express.json());
 import indexRouter from "./routes/index.js";
 import guildRouter from "./routes/guild.js";
 import optionRouter from "./routes/option.js";
+import streamerRouter from "./routes/streamer.js";
 
 // binding routes to app
 app.use("/", indexRouter);
 app.use("/guild", guildRouter);
 app.use("/option", optionRouter);
+app.use("/streamer", streamerRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
