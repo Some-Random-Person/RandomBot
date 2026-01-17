@@ -40,7 +40,7 @@ export default (sequelize, DataTypes) => {
       tableName: "welcomes",
       timestamps: true,
       indexes: [{ fields: ["guildId"] }],
-    }
+    },
   );
 
   return Welcome;

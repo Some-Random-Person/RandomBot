@@ -8,7 +8,7 @@ import { errorHandler } from "./middleware/error.js";
 import createError from "http-errors";
 
 db.sequelize.sync({
-  force: true,
+  force: false,
   logging: console.log,
 });
 
@@ -43,7 +43,7 @@ const server = http.createServer(app);
 server.on("error", (error) => {
   if (error.code === "EADDRINUSE") {
     console.error(
-      `Port ${port} is already in use. Please specify a different port.`
+      `Port ${port} is already in use. Please specify a different port.`,
     );
     process.exit(1);
   }

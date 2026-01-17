@@ -11,7 +11,7 @@ router.post("/", async (req, res, next) => {
     const streamer = await streamerService.create(
       guildId,
       streamerName,
-      channelId
+      channelId,
     );
 
     return res.status(201).jsend.success(streamer);
@@ -64,7 +64,7 @@ router.put("/status", async (req, res, next) => {
     const streamer = await streamerService.updateLiveStatus(
       guildId,
       streamerName,
-      isLive
+      isLive,
     );
 
     return res.status(200).jsend.success(streamer);

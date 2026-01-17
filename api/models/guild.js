@@ -37,7 +37,7 @@ export default (sequelize, DataTypes) => {
       tableName: "guilds",
       timestamps: true,
       indexes: [{ fields: ["guildId"] }],
-    }
+    },
   );
 
   return Guild;

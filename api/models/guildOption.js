@@ -39,7 +39,7 @@ export default (sequelize, DataTypes) => {
     {
       sequelize,
       tableName: "guildOptions",
-    }
+    },
   );
 
   return GuildOption;

@@ -16,7 +16,7 @@ class streamerService {
 
     if (streamer) {
       throw new ConflictError(
-        `Streamer ${streamerName} already exists in this guild`
+        `Streamer ${streamerName} already exists in this guild`,
       );
     }
 

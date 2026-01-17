@@ -22,7 +22,7 @@ export default (sequelize, DataTypes) => {
       tableName: "reminders",
       timestamps: true,
       indexes: [{ fields: ["userId"] }],
-    }
+    },
   );
 
   return Reminder;

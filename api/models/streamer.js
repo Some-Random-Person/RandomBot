@@ -43,7 +43,7 @@ export default (sequelize, DataTypes) => {
       tableName: "streamers",
       timestamps: true,
       indexes: [{ fields: ["guildId"] }],
-    }
+    },
   );
 
   return Streamer;
