@@ -1,8 +1,8 @@
-import request from "supertest";
 import express from "express";
 import jsend from "jsend";
 import createError from "http-errors";
 import indexRouter from "../routes/index.js";
+import request from "supertest";
 
 describe("Index Routes", () => {
   let app;
@@ -34,7 +34,7 @@ describe("Index Routes", () => {
       const health = healthResponse.body.data;
 
       expect(healthResponse.statusCode).toBe(200);
-      expect(health.message).toBe("OK");
+      expect(health.status).toBe("healthy");
     });
   });
 });

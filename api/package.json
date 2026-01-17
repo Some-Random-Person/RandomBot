@@ -8,7 +8,7 @@
     "start": "node main.js",
     "lint": "eslint . ",
     "format": "prettier --check . --write",
-    "test": "jest ./tests/"
+    "test": "node --experimental-vm-modules node_modules/.bin/jest ./tests/"
   },
   "author": "",
   "license": "ISC",
