@@ -1,4 +1,4 @@
-name: JavaScript Workflow
+name: Randombot quick checks
 
 on:
   push:
