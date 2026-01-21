@@ -27,13 +27,18 @@ describe("Index Routes", () => {
     });
   });
 
-  describe("/health", () => {
-    test("GET Health data", async () => {
+  describe("Tests for the GET endpoint /health", () => {
+    test("Should return status 200 for GET /health", async () => {
+      const healthResponse = await request(app).get("/health");
+
+      expect(healthResponse.statusCode).toBe(200);
+    });
+
+    test("Should return health status 'healthy' for GET /health", async () => {
       const healthResponse = await request(app).get("/health");
 
       const health = healthResponse.body.data;
 
-      expect(healthResponse.statusCode).toBe(200);
       expect(health.status).toBe("healthy");
     });
   });
