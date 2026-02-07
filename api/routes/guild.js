@@ -50,4 +50,60 @@ router.delete("/", async (req, res, next) => {
   }
 });
 
+/* ------ GuildOptions ------ */
+
+router.post("/:guildId/options", async (req, res, next) => {
+  const { guildId } = req.params;
+
+  try {
+    const guildOptions = await guildService.addGuildOptions(guildId);
+
+    return res.status(201).jsend.success(guildOptions);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/:guildId/option", async (req, res, next) => {
+  const { guildId } = req.params;
+  const { optionId } = req.body;
+
+  try {
+    const guildOption = await guildService.getGuildOption(guildId, optionId);
+
+    return res.status(200).jsend.success(guildOption);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/:guildId/options", async (req, res, next) => {
+  const { guildId } = req.params;
+
+  try {
+    const guildOptions = await guildService.getAllGuildOption(guildId);
+
+    return res.status(200).jsend.success(guildOptions);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.put("/:guildId/options", async (req, res, next) => {
+  const { guildId } = req.params;
+  const { optionId, value } = req.body;
+
+  try {
+    const guildOption = await guildService.updateGuildOption(
+      guildId,
+      optionId,
+      value,
+    );
+
+    return res.status(200).jsend.success(guildOption);
+  } catch (error) {
+    next(error);
+  }
+});
+
 export default router;
