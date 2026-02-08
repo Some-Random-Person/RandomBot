@@ -19,7 +19,7 @@ export default defineConfig([
   },
   {
     // jest
-    files: ["**/*.spec.js", "**/*.test.js"],
+    files: ["**/*.spec.js", "**/*.test.js", "tests/setup.js"],
     plugins: { jest: jest },
     languageOptions: {
       globals: jest.environments.globals.globals,

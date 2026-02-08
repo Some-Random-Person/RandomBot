@@ -1,36 +1,28 @@
+import "dotenv/config";
 import { Sequelize, DataTypes } from "sequelize";
 import { fileURLToPath } from "url";
 import fs from "fs";
 import path from "path";
+import { getConfig } from "./config/database";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const basename = path.basename(__filename);
 
+const config = getConfig();
 const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_ADMIN_USERNAME,
-  process.env.DB_ADMIN_PASSWORD,
+  config.database,
+  config.username,
+  config.password,
   {
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    dialect: process.env.DB_DIALECT,
+    host: config.host,
+    port: config.port,
+    dialect: config.dialect,
   },
 );
 const db = {};
 
 db.sequelize = sequelize;
-
-// fs.readdirSync(__dirname)
-//   .filter((file) => {
-//     return (
-//       file.indexOf(".") !== 0 && file !== basename && file.slice(-3) === ".js"
-//     );
-//   })
-//   .forEach((file) => {
-//     const model = require(path.join(__dirname, file))(sequelize, DataTypes);
-//     db[model.name] = model;
-//   });
 
 const files = fs.readdirSync(__dirname).filter((file) => {
   return (
