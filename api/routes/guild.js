@@ -38,8 +38,8 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
-router.delete("/", async (req, res, next) => {
-  const { id } = req.body;
+router.delete("/:id", async (req, res, next) => {
+  const { id } = req.params;
 
   try {
     await guildService.delete(id);
@@ -64,9 +64,8 @@ router.post("/:guildId/options", async (req, res, next) => {
   }
 });
 
-router.get("/:guildId/option", async (req, res, next) => {
-  const { guildId } = req.params;
-  const { optionId } = req.body;
+router.get("/:guildId/option/:optionId", async (req, res, next) => {
+  const { guildId, optionId } = req.params;
 
   try {
     const guildOption = await guildService.getGuildOption(guildId, optionId);

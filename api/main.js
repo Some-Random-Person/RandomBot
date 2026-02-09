@@ -9,12 +9,11 @@ import createError from "http-errors";
 
 db.sequelize.sync({
   force: false,
-  logging: console.log,
 });
 
 // middlewares
 app.use(jsend.middleware);
-app.use(express.json()); 
+app.use(express.json());
 
 // routes
 import indexRouter from "./routes/index.js";

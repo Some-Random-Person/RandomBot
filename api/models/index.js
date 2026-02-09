@@ -3,7 +3,7 @@ import { Sequelize, DataTypes } from "sequelize";
 import { fileURLToPath } from "url";
 import fs from "fs";
 import path from "path";
-import { getConfig } from "./config/database";
+import { getConfig } from "./config/database.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -18,6 +18,7 @@ const sequelize = new Sequelize(
     host: config.host,
     port: config.port,
     dialect: config.dialect,
+    logging: false,
   },
 );
 const db = {};

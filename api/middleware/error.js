@@ -63,8 +63,6 @@ class ForeignKeyConstraintError extends Error {
 // handles the error and sends the proper info to the end user
 /* eslint no-unused-vars: "off" */
 function errorHandler(error, req, res, next) {
-  console.error(error);
-
   const knownErrors = [
     DatabaseError,
     NotFoundError,

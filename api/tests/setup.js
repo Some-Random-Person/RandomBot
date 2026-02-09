@@ -1,10 +1,9 @@
 import db from "../models/index.js";
 
 beforeAll(async () => {
-  await db.sequelize.sync({ force: true, logging: false });
+  await db.sequelize.authenticate();
 });
 
 afterAll(async () => {
-  await db.sequelize.drop();
   await db.sequelize.close();
 });
