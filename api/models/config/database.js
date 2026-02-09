@@ -21,4 +21,3 @@ export const getConfig = () => {
     dialect: process.env.DB_DIALECT,
   };
 };
- 
