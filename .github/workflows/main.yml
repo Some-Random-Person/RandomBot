@@ -11,17 +11,48 @@ on:
 jobs:
   api:
     runs-on: ubuntu-latest
+
+    services:
+      mmariadb:
+        image: mariadb:11.4
+        env:
+          MARIADB_ROOT_PASSWORD: testpass
+          MARIADB_DATABASE: test_db
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mariadb-admin ping -ptestpass"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Use Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
           node-version: "22"
+          cache: "npm"
       - name: Install dependencies
-        run: cd api && npm install
+        working-directory: ./api
+        run: npm ci
+
       - name: Run Prettier
-        run: cd api && npm run format
+        working-directory: ./api
+        run: npm run format
+
       - name: Run ESLint
-        run: cd api && npm run lint
+        working-directory: ./api
+        run: npm run lint
+
       - name: Run tests
-        run: cd api && npm test
+        working-directory: ./api
+        env:
+          NODE_ENV: test
+          TEST_DB_NAME: test_db
+          DB_ADMIN_USERNAME: root
+          DB_ADMIN_PASSWORD: testpass
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_DIALECT: mariadb
+        run: npm test
