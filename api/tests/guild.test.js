@@ -74,16 +74,15 @@ describe("Guild endpoint", () => {
       );
     });
 
-    /* don't this there really is any validation I can use here */
-    // it("return 400 with message for GET with invalid data", async () => {
-    //   await request(app).post("/guild").send({
-    //     id: "580466660377362493",
-    //   });
-    //   const guildResponse = await request(app).get('/guild/')
+    it("return 400 with message for GET with invalid data", async () => {
+      await request(app).post("/guild").send({
+        id: "580466660377362493",
+      });
+      const guildResponse = await request(app).get("/guild/");
 
-    //   expect(guildResponse.statusCode).toBe(400);
-    //   expect(guildResponse.body.data.message).toBeDefined();
-    // });
+      expect(guildResponse.statusCode).toBe(400);
+      expect(guildResponse.body.data.message).toBeDefined();
+    });
   });
 
   describe("Get all guilds", () => {

@@ -1,5 +1,13 @@
-import { NotFoundError, ConflictError } from "../middleware/error.js";
+import {
+  NotFoundError,
+  ConflictError,
+  ValidationError,
+} from "../middleware/error.js";
 import toPlain from "../utility/toPlain.js";
+import {
+  validateGuildId,
+  validateOptionUpdate,
+} from "../validation/guildValidation.js";
 
 class guildService {
   constructor(db) {
@@ -9,6 +17,12 @@ class guildService {
   }
 
   async create(id) {
+    const validationErrors = await validateGuildId(id);
+
+    if (validationErrors.length > 0) {
+      throw new ValidationError(validationErrors.join(", "));
+    }
+
     const guild = await this.guild.findByPk(id);
 
     if (guild) {
@@ -57,6 +71,8 @@ class guildService {
   async addGuildOptions(id) {
     const options = await this.option.findAll();
     const guildOptionsArr = [];
+
+    await this.getOne(id); // just to check that the guild exists, getOne throws error if it doesn't
 
     await Promise.allSettled(
       options.map(async (option) => {
@@ -110,6 +126,15 @@ class guildService {
   }
 
   async updateGuildOption(guildId, optionId, value) {
+    const validationErrors = await validateOptionUpdate(
+      guildId,
+      optionId,
+      value,
+    );
+    if (validationErrors.length > 0) {
+      throw new ValidationError(validationErrors.join(", "));
+    }
+
     const guildOption = await this.guildOption.findOne({
       where: { guildId, optionId },
     });
