@@ -75,10 +75,7 @@ describe("Guild endpoint", () => {
     });
 
     it("return 400 with message for GET with invalid data", async () => {
-      await request(app).post("/guild").send({
-        id: "580466660377362493",
-      });
-      const guildResponse = await request(app).get("/guild/");
+      const guildResponse = await request(app).get("/guild/test");
 
       expect(guildResponse.statusCode).toBe(400);
       expect(guildResponse.body.data.message).toBeDefined();

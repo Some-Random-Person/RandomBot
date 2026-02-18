@@ -35,6 +35,12 @@ class guildService {
   }
 
   async getOne(id) {
+    const validationErrors = await validateGuildId(id);
+
+    if (validationErrors.length > 0) {
+      throw new ValidationError(validationErrors.join(", "));
+    }
+
     const guild = await this.guild.findByPk(id);
 
     if (!guild) {
@@ -55,6 +61,12 @@ class guildService {
   }
 
   async delete(id) {
+    const validationErrors = await validateGuildId(id);
+
+    if (validationErrors.length > 0) {
+      throw new ValidationError(validationErrors.join(", "));
+    }
+
     const guild = await this.guild.findByPk(id);
 
     if (!guild) {
@@ -126,11 +138,7 @@ class guildService {
   }
 
   async updateGuildOption(guildId, optionId, value) {
-    const validationErrors = await validateOptionUpdate(
-      guildId,
-      optionId,
-      value,
-    );
+    const validationErrors = await validateOptionUpdate(value);
     if (validationErrors.length > 0) {
       throw new ValidationError(validationErrors.join(", "));
     }
