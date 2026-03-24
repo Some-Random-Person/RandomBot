@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/RandomBot.Api/RandomBot.Api.csproj" />
+    <Project Path="src/RandomBot.Application/RandomBot.Application.csproj" />
+    <Project Path="src/RandomBot.Bot/RandomBot.Bot.csproj" />
+    <Project Path="src/RandomBot.Domain/RandomBot.Domain.csproj" />
+    <Project Path="src/RandomBot.Infrastructure/RandomBot.Infrastructure.csproj" />
+  </Folder>
+</Solution>
