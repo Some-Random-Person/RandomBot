@@ -2,6 +2,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RandomBot.Domain\RandomBot.Domain.csproj" />
+    <ProjectReference Include="..\RandomBot.Infrastructure\RandomBot.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.17.0" />
   </ItemGroup>
 
   <PropertyGroup>

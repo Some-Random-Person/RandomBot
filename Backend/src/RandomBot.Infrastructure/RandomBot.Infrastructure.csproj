@@ -2,7 +2,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RandomBot.Domain\RandomBot.Domain.csproj" />
-    <ProjectReference Include="..\RandomBot.Application\RandomBot.Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.3.9" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
   </ItemGroup>
 
   <PropertyGroup>
